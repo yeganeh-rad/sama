@@ -445,3 +445,5 @@ sama.db
 # migration files
 Migrations/
 
+sama.db-shm
+sama.db-wal
