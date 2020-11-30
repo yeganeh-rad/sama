@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using sama.Data;
 
 namespace sama
 {
@@ -24,6 +26,12 @@ namespace sama
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            // Added for API controller injection
+            services.AddControllers();
+            // Defualt for MVC
+            services.AddDbContext<MvcUserContext>(options =>
+            options.UseSqlite(Configuration.GetConnectionString("MvcUserContext")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +56,9 @@ namespace sama
 
             app.UseEndpoints(endpoints =>
             {
+                // added for API mapping
+                endpoints.MapControllers();
+                // defualt mapping in MVC
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
